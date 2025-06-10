@@ -1,0 +1,25 @@
+name: Deploy to Proxmox LXC Container
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Proxmox LXC Container
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.PROXMOX_HOST_PEPPE }}
+          port: ${{ secrets.PROXMOX_PORT_PEPPE }}
+          key: ${{ secrets.PROXMOX_SSH_KEY_PEPPE }}
+          username: ${{ secrets.PROXMOX_USERNAME_PEPPE }}
+          script: |
+            pct exec 106 -- bash -c '
+              cd /root/mbare-bot &&
+              git pull &&
+              docker compose down &&
+              docker compose up -d --build
+            '
