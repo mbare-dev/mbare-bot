@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { nanoid } from 'nanoid';
+import slugify from 'slugify';
 
 type AudioFile = {
     id: string;
@@ -12,7 +12,7 @@ const audioDirectory = path.join(__dirname, '../../audio');
 const files = fs.readdirSync(audioDirectory).filter(file => file.endsWith('.mp3'));
 
 const audioFiles = files.map(file => ({
-    id: nanoid(),
+    id: slugify(file.replace('.mp3', '')),
     name: file.replace('.mp3', ''),
     file: path.join(audioDirectory, file)
 }));
