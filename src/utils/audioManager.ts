@@ -1,28 +1,59 @@
-import fs from 'fs';
-import path from 'path';
-import slugify from 'slugify';
+import fs from "fs";
+import path from "path";
+import slugify from "slugify";
 
 type AudioFile = {
-    id: string;
-    name: string;
-    file: string;
+  id: string;
+  name: string;
+  file: string;
+  folder: string;
 };
 
-const audioDirectory = path.join(__dirname, '../../audio');
-const files = fs.readdirSync(audioDirectory).filter(file => file.endsWith('.mp3'));
+const audioDirectory = path.join(__dirname, "../../audio");
 
-const audioFiles = files.map(file => ({
-    id: slugify(file.replace('.mp3', '')),
-    name: file.replace('.mp3', ''),
-    file: path.join(audioDirectory, file)
-}));
+const getAllFiles = (
+  dirPath: string,
+  arrayOfFiles: string[] = []
+): string[] => {
+  const files = fs.readdirSync(dirPath);
+
+  files.forEach((file) => {
+    const fullPath = path.join(dirPath, file);
+    if (fs.statSync(fullPath).isDirectory()) {
+      arrayOfFiles = getAllFiles(fullPath, arrayOfFiles);
+    } else {
+      if (file.endsWith(".mp3")) {
+        arrayOfFiles.push(fullPath);
+      }
+    }
+  });
+
+  return arrayOfFiles;
+};
+
+const allAudioFiles: AudioFile[] = getAllFiles(audioDirectory).map((file) => {
+  const fileName = path.basename(file, ".mp3");
+  const relativePath = path.relative(audioDirectory, file);
+  const folder =
+    path.dirname(relativePath) === "." ? "/" : path.dirname(relativePath);
+
+  return {
+    id: slugify(fileName, { lower: true }),
+    name: fileName,
+    file: file,
+    folder: folder,
+  };
+});
 
 export const getAudioAvailable = (): AudioFile[] => {
-    return audioFiles
+  return allAudioFiles;
 };
 
-export const getRandomAudioFile = (): AudioFile => {
-    const randomIndex = Math.floor(Math.random() * audioFiles.length);
+export const getRandomAudioFile = (folder = "/"): AudioFile => {
+  const filteredFiles = allAudioFiles.filter(
+    (audio) => audio.folder === folder
+  );
 
-    return audioFiles[randomIndex];
+  const randomIndex = Math.floor(Math.random() * filteredFiles.length);
+  return filteredFiles[randomIndex];
 };

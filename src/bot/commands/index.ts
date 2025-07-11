@@ -1,8 +1,8 @@
 import { Telegraf } from 'telegraf';
-import { quoteChoice, randomQuote, sendQuote } from './sito-esaurito/quotes';
+import { quoteChoice, randomQuote, sendQuote, randomAVirita } from './sito-esaurito/quotes';
 import { help } from './help';
 
-export const commands = [quoteChoice, sendQuote, randomQuote, help];
+export const commands = [quoteChoice, sendQuote, randomQuote, help, randomAVirita];
 
 export const setupCommands = (bot: Telegraf) => {
     // For debugging purposes, you can uncomment the following lines to log incoming messages and callback queries.
