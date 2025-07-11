@@ -2,7 +2,7 @@ import { Context } from "telegraf";
 import { getRandomAudioFile } from "../../../../utils/audioManager";
 
 export const randomAVirita = {
-  command: "a-virita",
+  command: "a_virita",
   type: "command",
   description: "A virita",
   handler: async (ctx: Context) => {
