@@ -19,7 +19,7 @@ jobs:
           script: |
             pct exec 106 -- bash -c '
               cd /root/mbare-bot &&
-              get reset --hard &&
+              git reset --hard &&
               git pull origin main &&
               docker compose down &&
               docker compose up -d --build
