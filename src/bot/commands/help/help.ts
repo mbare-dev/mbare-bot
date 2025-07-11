@@ -8,8 +8,8 @@ export const help = {
         const commands = [
             { command: 'quote', description: 'Scegli una citazione da riprodurre' },
             { command: 'randomQuote', description: 'Invia una citazione casuale' },
-            { command: 'help', description: 'Mostra questo messaggio di aiuto' },
             { command: 'a-virita', description: 'Invia un "a virita" casuale' },
+            { command: 'help', description: 'Mostra questo messaggio di aiuto' },
             // Aggiungi qui altri comandi disponibili
         ];
 
