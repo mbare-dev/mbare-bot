@@ -20,6 +20,6 @@ export const sendQuote = {
             await ctx.reply('Audio file not found.');
             return;
         }
-        await ctx.replyWithVoice({ source: audioFile.file });
+        await ctx.replyWithVoice({ source: audioFile.file }, { caption: audioFile.name });
     },
 };

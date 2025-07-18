@@ -12,7 +12,7 @@ export const quoteChoice = {
             await ctx.reply('No audio files available.');
             return;
         }
-        
+
         const keyboard = Markup.inlineKeyboard(
             audioFiles.map(audio => 
                 Markup.button.callback(audio.name, `send-quote:${audio.id}`)

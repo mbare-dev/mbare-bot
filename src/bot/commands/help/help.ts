@@ -1,5 +1,9 @@
 import { Context } from "telegraf";
 
+const escapeMarkdownV2 = (text: string): string => {
+    return text.replace(/[_*\[\]()~`>#+=|{}.!-]/g, '\\$&');
+};
+
 export const help = {
     command: 'help',
     type: 'command',
@@ -7,15 +11,17 @@ export const help = {
     handler: async (ctx: Context) => {
         const commands = [
             { command: 'quote', description: 'Scegli una citazione da riprodurre' },
-            { command: 'randomQuote', description: 'Invia una citazione casuale' },
+            { command: 'randomquote', description: 'Invia una citazione casuale' },
             { command: 'a_virita', description: 'Invia un "a virita" casuale' },
             { command: 'help', description: 'Mostra questo messaggio di aiuto' },
-            // Aggiungi qui altri comandi disponibili
         ];
 
-        const helpMessage = `🤖 *MBARE BOT \\- Comandi Disponibili*\n\n${
-            commands.map(cmd => `• /${cmd.command} \\- ${cmd.description}`).join('\n')
-        }\n\nPer ulteriori informazioni visita il nostro sito: https://mbare\\.dev (sucuni)`;
+        const messages = [
+            '🤖 MBARE BOT - Comandi Disponibili',
+            commands.map(cmd => `• /${cmd.command} - ${cmd.description}`).join('\n'),
+        ];
+
+        const helpMessage = escapeMarkdownV2(messages.join('\n'));
 
         await ctx.replyWithMarkdownV2(helpMessage);
     },
