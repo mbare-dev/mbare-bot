@@ -9,6 +9,27 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Check disk space and prune docker builder if needed
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.PROXMOX_HOST_PEPPE }}
+          port: ${{ secrets.PROXMOX_PORT_PEPPE }}
+          key: ${{ secrets.PROXMOX_SSH_KEY_PEPPE }}
+          username: ${{ secrets.PROXMOX_USERNAME_PEPPE }}
+          script: |
+            pct exec 106 -- bash -c '
+              FREE_SPACE=$(df --output=avail /root | tail -1)
+              # Convert to MB
+              FREE_SPACE_MB=$((FREE_SPACE / 1024))
+              echo "Free space: ${FREE_SPACE_MB}MB"
+              if [ "$FREE_SPACE_MB" -lt 500 ]; then
+                echo "Disk space is low (<500MB). Running docker builder prune..."
+                docker builder prune -f
+              else
+                echo "Disk space is sufficient."
+              fi
+            '
+
       - name: Deploy to Proxmox LXC Container
         uses: appleboy/ssh-action@v1
         with:
